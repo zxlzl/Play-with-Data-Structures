@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class Node{
+			constructor(e){
+				this.e = e;
+				this.right = null;
+				this.left = null;
+			}
+		}
+
+		class BST{
+			constructor(){
+				this.root = null;
+				this.size = 0;
+			}
+
+			size(){
+				return this.size;
+			}
+
+			isEmpty(){
+				return this.size === 0;
+			}
+
+			add(e){
+				if(this.root == null){
+					this.root = new Node(e);
+					this.size++;				
+				}else{
+					this._add(this.root,e);
+				}
+			}
+
+			_add(node,e){
+				if(e == node.e){
+					return;
+				}else if(e<node.e&&node.left==null){
+					node.left = new Node(e);
+					this.size++;
+					return;
+				}else if(e>node.e&&node.right==null){
+					node.right = new Node(e);
+					this.size++;
+					return;
+				}
+
+				if(e<node.e){
+					this._add(node.left,e);
+				}else{
+					this._add(node.right,e);
+				}
+			}
+		}
+
+		// 测试
+		// let tree = new BST();
+		// let treeNode = [5,2,7,1,2,7,9]
+		// for(let i=0;i<treeNode.length;i++){
+		// 	tree.add(treeNode[i]);
+		// }
+		// console.log(tree);
+
+
+	</script>
+</body>
+</html>
