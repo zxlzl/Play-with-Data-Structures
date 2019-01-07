@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class Node{
+			constructor(e){
+				this.e = e;
+				this.right = null;
+				this.left = null;
+			}
+		}
+
+		class BST{
+			constructor(){
+				this.root = null;
+				this.size = 0;
+			}
+
+			size(){
+				return this.size;
+			}
+
+			isEmpty(){
+				return this.size === 0;
+			}
+
+			add(e){
+				this.root = this._add(this.root,e)
+			}
+
+			_add(node,e){
+				if(node == null){
+					this.size++;
+					return new Node(e);
+				}
+
+				if(e<node.e){
+					node.left = this._add(node.left,e);
+				}else if(e>node.e){
+					node.right = this._add(node.right,e);
+				}
+
+				return node;
+			}
+
+			contains(e){
+				return this._contains(this.root,e);
+			}
+
+			_contains(node,e){
+				if(node==null){
+					console.log('不包含元素');
+					return false;
+				}
+
+				if(e == node.e){
+					console.log('包含元素');
+				}else if(e<node.e){
+					return this._contains(node.left,e);
+				}else{
+					return this._contains(node.right,e);
+				}
+			}
+
+			preOrder(){
+				console.log('前序遍历:')
+				this._preOrder(this.root);
+			}
+
+			_preOrder(node){
+				if(node == null){
+					return;
+				}
+
+				console.log(node.e);
+				this._preOrder(node.left);
+				this._preOrder(node.right);
+			}
+
+			inOrder(){
+				console.log('中序遍历:')
+				this._inOrder(this.root);
+			}
+
+			_inOrder(node){
+				if(node==null){
+					return;
+				}
+
+				this._inOrder(node.left);
+				console.log(node.e);
+				this._inOrder(node.right);
+			}
+
+			postOrder(){
+				console.log('后序遍历:')
+				this._postOrder(this.root);
+			}
+
+			_postOrder(node){
+				if(node==null){
+					return;
+				}
+
+				this._postOrder(node.left);
+				this._postOrder(node.right);
+				console.log(node.e);
+			}
+
+			// 二分搜索树的非递归前序遍历
+			preOrderNR(){
+				console.log('非递归前序遍历:')
+				if(this.root == null){
+					return;
+				}
+
+				let stack = [];
+				stack.push(this.root);
+				while(stack.length){
+					let cur = stack.pop();
+					console.log(cur.e);
+
+					if(cur.right != null){
+						stack.push(cur.right);
+					}
+					if(cur.left != null){
+						stack.push(cur.left);
+					}
+				}
+
+			}
+
+		}
+
+		// 测试
+		let tree = new BST();
+		let treeNode = [5,2,1,3,7,10]
+		for(let i=0;i<treeNode.length;i++){
+			tree.add(treeNode[i]);
+		}
+		console.log(tree);
+		tree.preOrderNR();
+	</script>
+</body>
+</html>
+

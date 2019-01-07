@@ -29,43 +29,33 @@
 			}
 
 			add(e){
-				if(this.root == null){
-					this.root = new Node(e);
-					this.size++;				
-				}else{
-					this._add(this.root,e);
-				}
+				this.root = this._add(this.root,e)
 			}
 
 			_add(node,e){
-				if(e == node.e){
-					return;
-				}else if(e<node.e&&node.left==null){
-					node.left = new Node(e);
+				if(node == null){
 					this.size++;
-					return;
-				}else if(e>node.e&&node.right==null){
-					node.right = new Node(e);
-					this.size++;
-					return;
+					return new Node(e);
 				}
 
 				if(e<node.e){
-					this._add(node.left,e);
-				}else{
-					this._add(node.right,e);
+					node.left = this._add(node.left,e);
+				}else if(e>node.e){
+					node.right = this._add(node.right,e);
 				}
+
+				return node;
 			}
+
 		}
 
 		// 测试
 		let tree = new BST();
-		let treeNode = [5,2,7,1,2,7,9]
+		let treeNode = [5,2,1,3,7,9]
 		for(let i=0;i<treeNode.length;i++){
 			tree.add(treeNode[i]);
 		}
 		console.log(tree);
-
 
 	</script>
 </body>
