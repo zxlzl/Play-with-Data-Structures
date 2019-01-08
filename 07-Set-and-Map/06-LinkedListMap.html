@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class Node{
+			constructor(key,value,next){
+				this.key = key;
+				this.value = value;
+				this.next = next;
+			}
+		}
+
+		class LinkedListMap{
+			constructor(){
+				this.dummyHead = new Node();
+				this.size = 0;
+			}
+
+			getSize(){
+				return this.size;
+			}
+
+			isEmpty(){
+				return this.size === 0;
+			}
+
+			getNode(key){
+				let cur = this.dummyHead.next;
+				while(cur!=null){
+					if(cur.key == key){
+						// console.log(cur);
+						return cur;
+					}
+					cur = cur.next;
+				}
+				return null;
+			}
+
+			contains(key){
+				// console.log(this.getNode(key) != null);
+				return this.getNode(key) != null;
+			}
+
+			get(key){
+				let node = this.getNode(key);
+				// console.log(node == null? null : node.value);
+				return node == null? null : node.value;
+			}
+
+			add(key,value){
+				let node = this.getNode(key);
+				if(node==null){
+					this.dummyHead.next = new Node(key,value,this.dummyHead.next);
+					this.size++;
+				}else{
+					node.value = value;
+				}
+			}
+
+			set(key,newValue){
+				let node = this.getNode(key);
+				if(node==null){
+					throw new Error(key+"doesn't exist!");
+				}
+				node.value = newValue;
+			}
+
+			remove(key){
+				let prev = this.dummyHead;
+				while(prev.next!=null){
+					if(prev.next.key==key){
+						break;
+					}
+					prev = prev.next;
+				}
+
+				if (prev.next!=null) {
+					let delNode = prev.next;
+					prev.next = delNode.next;
+					delNode.next = null;
+					this.size--;
+					return delNode.value;
+				}
+
+				return null;
+			}
+
+		}
+
+		// let map = new LinkedListMap();
+		// for(let i=0;i<10;i++){
+		// 	map.add(i,2*i);
+		// }
+		// console.log(map);
+		// map.getNode(3);
+		// map.contains(5);
+		// map.get(6);
+		// map.add(34,12);
+		// console.log(map);
+		// map.set(9,12);
+		// console.log(map);
+		// map.remove(9);
+		// console.log(map);
+	</script>
+</body>
+</html>
