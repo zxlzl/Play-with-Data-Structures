@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class Node{
+			constructor(e,next){
+				this.e = e;
+				this.next = next;
+			}
+		}
+
+		class linkList{
+			constructor(){
+				this.dummyHead = new Node();
+				this.size = 0;
+			}
+
+			addFirst(e){
+				this.add(0,e);
+			}
+
+			addLast(e){
+				this.add(this.size,e);
+			}
+
+			add(index,e){
+				if(index<0||index>this.size){
+					throw new Error('Add failed. Illegal index');
+				}
+
+				let prev = this.dummyHead;
+
+				for (let i = 0; i < index; i++) {
+					prev = prev.next;
+				}
+
+				let node = new Node(e);
+				node.next = prev.next;
+				prev.next = node;
+				// prev.next = new Node(e, prev.next);
+				this.size++;
+			}
+
+			get(index){
+				if(index<0||index>this.size){
+					throw new Error('Get failed. Illegal index');
+				}
+
+				let cur = this.dummyHead.next;
+
+				for(let i = 0;i<index;i++){
+					cur = cur.next;
+				}
+
+				console.log(cur.e);
+				// return cur.e;
+
+			}
+
+			getFirst(){
+				this.get(0);
+			}
+
+			getLast(){
+				this.get(this.size-1);
+			}
+
+			set(index,e){
+				if(index<0||index>this.size){
+					throw new Error('Set failed. Illegal index');
+				}
+
+				let cur = this.dummyHead.next;
+
+				for(let i = 0;i<index;i++){
+					cur = cur.next;
+				}
+
+				cur.e = e;
+			}
+
+			setFirst(e){
+				this.set(0,e);
+			}
+
+			setLast(e){
+				this.set(this.size-1,e);
+			}
+
+			contains(e){
+				let cur = this.dummyHead.next;
+
+				// 第一种写法
+				while(cur!==null){
+					if(cur.e===e){
+						return true;
+					}
+					cur=cur.next;
+				}
+
+				return false;
+
+				// 第二种写法
+				for(let i=0;cur!=undefined;i++){
+					cur = cur.next;
+					if(cur.e == e){
+						return true;
+					}
+				}
+				return false;
+			}
+
+			remove(index){
+				if(index<0||index>this.size){
+					throw new Error('Remove failed. Illegal index');
+				}
+
+				let prev = this.dummyHead;
+
+				for(let i=0;i<index;i++){
+					prev.next = prev.next;
+				}
+
+				let delNode = prev.next;
+				prev.next = delNode.next;
+				delNode.next = null;
+				this.size--;
+			}
+
+			removeFirst(){
+				this.remove(0);
+			}
+
+			removeLast(){
+				this.remove(ths.size-1);
+			}
+
+			removeElement(el){
+				let prev = tihis.dummyHead;
+
+				while(prev!=null){
+					if(prev.next.e ===el){
+						prev.next = prev.next.next;
+					}else{
+						prev = prev.next;
+					}
+				}
+
+				this.size--;
+			}
+
+			toString(){
+				let ret = '',cur = this.dummyHead.next;
+				while(cur){
+					ret += cur.e+'->';
+					cur = cur.next;
+				}
+
+				ret += 'null';
+				console.log(ret);
+
+			}
+
+		}
+
+		let linkedList = new linkList();
+		for(let i = 0;i<5;i++){
+			linkedList.addFirst(i);
+		}
+		console.log(linkedList);
+
+		linkedList.add(2,4);
+		console.log(linkedList);
+		linkedList.getFirst();
+		linkedList.get(4);
+		linkedList.set(1,45);
+		console.log(linkedList);
+		linkedList.setFirst(45);
+		console.log(linkedList);
+		linkedList.setLast(45);
+		console.log(linkedList);
+		linkedList.contains(45);
+		linkedList.remove(4);
+		console.log(linkedList);
+		linkedList.toString();
+	</script>
+</body>
+</html>
