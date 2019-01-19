@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var NumArray = function(nums) {
+			this.sum = [];
+		    let sums = [];
+		    sums[0] = 0;
+		    for(let i=1;i<nums.length+1;i++){
+		        sums[i]=sums[i-1]+nums[i-1];
+		    }
+		    console.log(sums);
+		    this.sum = sums.slice(0);
+		    
+		};
+
+		/** 
+		 * @param {number} i 
+		 * @param {number} j
+		 * @return {number}
+		 */
+		NumArray.prototype.sumRange = function(i, j) {
+			console.log(this.sum);
+		    return this.sum[j+1]-this.sum[i];
+		};
+		
+	</script>
+</body>
+</html>
