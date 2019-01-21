@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class Node{
+			constructor(value){
+				this.value = value;
+				this.next = new Map();
+			}
+		}
+		var MapSum = function(value) {
+			this.root = new Node(0);
+		};
+
+		/** 
+		 * @param {string} key 
+		 * @param {number} val
+		 * @return {void}
+		 */
+		MapSum.prototype.insert = function(key, val) {
+		    let cur = this.root,c;
+		    for (let i = 0; i < key.length; i++) {
+		    	c = key.charAt(i);
+		    	if (!cur.next.get(c)) {
+		    		cur.next.set(c,new Node(0));
+		    	}
+		    	cur = cur.next.get(c);
+		    }
+		    cur.value = val;
+		};
+
+		/** 
+		 * @param {string} prefix
+		 * @return {number}
+		 */
+		MapSum.prototype.sum = function(prefix) {
+		    let cur = this.root,c;
+		    for (let i = 0; i < prefix.length; i++) {
+		    	c = prefix.charAt(i);
+		    	if (!cur.next.get(c)) {
+		    		return 0;
+		    	}
+		    	cur = cur.next.get(c);
+		    }
+		    return this._sum(cur);
+		};
+
+		MapSum.prototype._sum = function (node) {
+			let res = node.value;
+			for (let key of node.next.keys()) {
+				res += this.sum(node.next.get(key));
+			}
+			return res;
+		}
+	</script>
+</body>
+</html>

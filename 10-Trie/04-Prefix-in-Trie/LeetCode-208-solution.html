@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var TrieNode = function(){
+		    this.next = new Map();
+		    this.isWorld = false;
+		}
+		var Trie = function() {
+		    this.root = new TrieNode(null);
+		    this.size = 0;
+		};
+		
+		Trie.prototype.insert = function(word) {
+		    let cur = this.root,c;
+		    for (let i = 0; i < word.length; i++) {
+		        c = word.charAt(i);
+		        if(!cur.next.get(c)){
+		            cur.next.set(c,new TrieNode(c));
+		        }
+		        cur = cur.next.get(c);
+		    }
+		    if (!cur.isWorld) {
+		        cur.isWorld = true;
+		        this.size++;
+		    }
+		};
+
+		Trie.prototype.search = function(word) {
+		    let cur = this.root,c;
+		    for (let i = 0; i < word.length; i++) {
+		        c = word.charAt(i);
+		        if (!cur.next.get(c)) {
+		            return false;
+		        }
+		        cur = cur.next.get(c);
+		    }
+		    return cur.isWorld;
+		};
+
+		Trie.prototype.startsWith = function(prefix) {
+		    let cur = this.root,c;
+		    for (let i = 0; i < prefix.length; i++) {
+		        c = prefix.charAt(i);
+		        if (!cur.next.get(c)) {
+		            return false;
+		        }
+		        cur = cur.next.get(c);
+		    }
+		    return true;
+		};
+	</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class TrieNode{
+		 	constructor(){
+		 		this.next = new Map();
+		 		this.isWorld = false;
+		 	}
+		}
+
+		class Trie{
+		 	constructor(){
+		 		this.root = new TrieNode(null);
+		 		this.size = 0;
+		 	}
+
+		 	getSize(){
+		 		return this.size;
+		 	}
+
+		 	// 向Trie中添加一个新的单词word
+		 	add(word){
+		 		let cur = this.root,c;
+		 		for (let i = 0; i < word.length; i++) {
+		 			c = word.charAt(i);
+		 			if(!cur.next.get(c)){
+		 				cur.next.set(c,new TrieNode(c));
+		 			}
+		 			cur = cur.next.get(c);
+		 		}
+		 		if (!cur.isWorld) {
+		 			cur.isWorld = true;
+		 			this.size++;
+		 		}
+		 	}
+
+		 	isPrefix(prefix){
+		 		let cur = this.root,c;
+		 		for (let i = 0; i < prefix.length; i++) {
+		 			c = prefix.charAt(i);
+		 			if (!cur.next.get(c)) {
+		 				return false;
+		 			}
+		 			cur = cur.next.get(c);
+		 		}
+		 		return true;
+		 	}
+
+		 	// 查询单词word是否在Trie中
+		 	search(word){
+		 		let cur = this.root;
+		 		return this.match(cur,word,0)
+		 	}
+
+		 	match(node,word,index){
+		 		if(index == word.length){
+		 			return node.isWorld;
+		 		}
+
+		 		let c = word.charAt(index);
+		 		if(c != '.'){
+		 			if(!node.next.has(c)){
+		 				return false;
+		 			}
+		 			return this.match(node.next.get(c),word,index+1);
+		 		}else{
+		 			for (let key of node.next.keys()) {
+		 				if(this.match(node.next.get(key),word,index+1)){
+		 					return true;
+		 				}
+		 			}
+		 			return false;
+		 		}
+		 	}
+		}
+
+		let trie = new Trie();
+		trie.add('panda');
+		trie.add('apple');
+		trie.add('bad');
+		console.log(trie);
+		console.log(trie.isPrefix('ap'));
+		console.log(trie.search('p....'));
+		console.log(trie.search('..d'));
+	</script>
+</body>
+</html>

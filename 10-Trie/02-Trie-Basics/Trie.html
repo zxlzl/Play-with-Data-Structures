@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class TrieNode{
+		 	constructor(){
+		 		this.next = new Map();
+		 		this.isWorld = false;
+		 	}
+		}
+
+		class Trie{
+		 	constructor(){
+		 		this.root = new TrieNode(null);
+		 		this.size = 0;
+		 	}
+
+		 	getSize(){
+		 		return this.size;
+		 	}
+
+		 	// 向Trie中添加一个新的单词word
+		 	add(word){
+		 		let cur = this.root,c;
+		 		for (let i = 0; i < word.length; i++) {
+		 			c = word.charAt(i);
+		 			if(!cur.next.get(c)){
+		 				cur.next.set(c,new TrieNode(c));
+		 			}
+		 			cur = cur.next.get(c);
+		 		}
+		 		if (!cur.isWorld) {
+		 			cur.isWorld = true;
+		 			this.size++;
+		 		}
+		 	}
+		}
+
+		let trie = new Trie();
+		trie.add('apple');
+		trie.add('panda');
+		console.log(trie);
+	</script>
+</body>
+</html>
