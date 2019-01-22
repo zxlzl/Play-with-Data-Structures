@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class Node{
+			constructor(key,value){
+				this.key = key;
+				this.value = value;
+				this.left = null;
+				this.right = null;
+				this.height = 1;
+			}
+		}
+
+		class AVLTree{
+			constructor(){
+				this.root = null;
+				this.size = 0;
+			}
+
+			getSize(){
+				return this.size;
+			}
+
+			isEmpty(){
+				return this.size === 0;
+			}
+
+			// 判断该二叉树是否是一颗二分搜索树
+			isBST(){
+				let keys = [];
+				this.inOrder(this.root,keys);
+				for (let i = 1; i < keys.length; i++) {
+					if (keys[i-1]>keys[i]) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+			inOrder(node,keys){
+				if (!node) {
+					return;
+				}
+				this.inOrder(node.left,keys);
+				keys.push(node.key);
+				this.inOrder(node.right,keys);
+			}
+
+			// 判断该二叉树是否是一棵平衡二叉树
+			isBanlanced(){
+				return this._isBanlanced(this.root);
+			}
+
+			_isBanlanced(node){
+				if (!node) {
+					return true;
+				}
+				let banlanceFactor = this.getBalanceFactor(node);
+				if(Math.abs(banlanceFactor)>1){
+					return false;
+				}
+				return this._isBanlanced(node.left) && this._isBanlanced(node.right);
+			}
+
+			// 获取节点高度
+			getHeight(node){
+				if(!node){
+					return 0;
+				}
+				return node.height;
+			}
+
+			// 获得node节点的平衡因子
+			getBalanceFactor(node){
+				if (!node) {
+					return 0;
+				}
+				return this.getHeight(node.left)-this.getHeight(node.right);
+			}
+
+			// 对节点y进行向右旋转操作，返回旋转后新的根节点x
+		    //        y                              x
+		    //       / \                           /   \
+		    //      x   T4     向右旋转 (y)        z     y
+		    //     / \       - - - - - - - ->    / \   / \
+		    //    z   T3                       T1  T2 T3 T4
+		    //   / \
+		    // T1   T2
+		    rightRatote(y){
+		    	let x = y.left;
+		    	let T3 = x.right;
+
+		    	// 向右旋转过程
+		    	x.right= y;
+		    	y.left = T3;
+
+		    	// 更新height
+		    	y.height = Math.max(this.getHeight(y.left),this.getHeight(y.right))+1;
+		    	x.height = Math.max(this.getHeight(x.left),this.getHeight(x.right))+1;
+
+		    	return x;
+		    }
+
+	        // 对节点y进行向左旋转操作，返回旋转后新的根节点x
+		    //    y                             x
+		    //  /  \                          /   \
+		    // T1   x      向左旋转 (y)       y     z
+		    //     / \   - - - - - - - ->   / \   / \
+		    //   T2  z                     T1 T2 T3 T4
+		    //      / \
+		    //     T3 T4
+		    leftRotate(y) {
+		        let x = y.right;
+		        let T2 = x.left;
+
+		        // 向左旋转过程
+		        x.left = y;
+		        y.right = T2;
+
+		        // 更新height
+		        y.height = Math.max(this.getHeight(y.left), this.getHeight(y.right)) + 1;
+		        x.height = Math.max(this.getHeight(x.left), this.getHeight(x.right)) + 1;
+
+		        return x;
+		    }
+
+			// 添加新的元素
+			add(key,value){
+				this.root = this._add(this.root,key,value);
+			}
+
+			_add(node,key,value){
+				if(node == null){
+					this.size++;
+					return new Node(key,value);
+				}
+
+				if(key<node.key){
+					node.left = this._add(node.left,key,value);
+				}else if(key>node.key){
+					node.right = this._add(node.right,key,value);
+				}else{
+					node.value = value;
+				}
+
+				// 更新height
+				node.height = 1+Math.max(this.getHeight(node.left),this.getHeight(node.right));
+				// 计算平衡因子
+				let banlanceFactor = this.getBalanceFactor(node);
+				if(Math.abs(banlanceFactor)>1){
+					console.log("unbalanced : " + balanceFactor);
+				}
+
+				return node;
+			}
+
+			getNode(node,key){
+				if(node==null){
+					return null;
+				}
+
+				if(key == node.key){
+					return node;
+				}else if(key<node.key){
+					return this.getNode(node.left,key);
+				}else{
+					return this.getNode(node.right,key);
+				}
+			}
+
+			contains(key){
+				return this.getNode(this.root,key) !=null;
+			}
+
+			get(key){
+				let node = this.getNode(this.root,key);
+				return node == null ? null:node.value;
+			}
+
+			set(key,newValue){
+				let node = this.getNode(this.root,key);
+				if (!node) {
+					throw new Error(key + " doesn't exist!");
+				}
+				node.value = newValue;
+			}
+
+			// 返回以node为根的二分搜索树的最小值所在的节点
+			minimum(node){
+				if(node.left == null){
+					return node;
+				}
+				return this.minimum(node.left);
+			}
+
+			// 删除以node为根的树中的最小节点
+			// 返回删除节点后新的二分搜索树的根
+			removeMin(node){
+				if(node.left == null){
+					let rightNode = node.right;
+					node.right = null;
+					this.size--;
+					return rightNode;
+				}
+
+				node.left = this.removeMin(node.left);
+				return node;
+			}
+
+			// 删除元素值为e的节点
+			remove(key){
+				let node = this.getNode(this.root,key);
+				if (node !=null) {
+					this.root = this._remove(this.root,key);
+					return node.value;
+				}
+				return null;
+			}
+
+			_remove(node,key){
+				if(node == null){
+					return null;
+				}
+				if(e<node.e){
+					node.left = this._remove(node.left,key);
+					return node;
+				}else if(e>node.e){
+					node.right = this._remove(node.right,key);
+					return node;
+				}else{
+					if(node.left ==null){
+						let rightNode = node.right;
+						node.right = null;
+						this.size--;
+						return rightNode;
+					}
+					if(node.right == null){
+						let leftNode = node.left;
+						node.left = null;
+						this.size--;
+						return leftNode;
+					}
+					// 待删除节点左右字数不为空的情况
+					// 找到比待删除节点大的最小节点，即待删除节点右子树的最小节点（或待删除节点左子树的最小节点）
+					// 用找到的节点代替待删除节点
+					let successor = this.minimum(node.right);
+					successor.right = this.removeMin(node.right);
+					successor.left = node.left;
+
+					node.left = node.right = null;
+					return successor;
+				}
+			}
+		}
+
+		// 测试
+		let avl = new AVLTree();
+		avl.add(7,7);
+		avl.add(12,12)
+		console.log(avl.isBST());
+		console.log(avl.isBanlanced());
+		
+	</script>
+</body>
+</html>
+
