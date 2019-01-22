@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class UnionFind{
+			constructor(size){
+				this.id = new Array(size);
+				for (let i = 0; i < size; i++) {
+					this.id[i] = i;
+				}
+			}
+
+			getSize(){
+				return this.id.length;
+			}
+
+			find(p){
+				if(p<0||p>=this.id.length){
+					throw new Error('p is out of bound.');
+				}
+				return this.id[p];
+			}
+
+			isConnected(p,q){
+				return this.find(p) == this.find(q);
+			}
+
+			unionElements(p,q){
+				let pID = this.find(p);
+				let qID = this.find(q);
+				if (pID == qID) {
+					return;
+				}
+				for (let i = 0; i < this.id.length; i++) {
+					if (this.id[i] == pID) {
+						this.id[i] = qID;
+					}
+				}
+			}
+		}
+
+		let unionFind = new UnionFind(6);
+		console.log(unionFind.find(3));
+		console.log(unionFind.isConnected(2,5));
+		unionFind.unionElements(2,5);
+		console.log(unionFind);
+	</script>
+</body>
+</html>
