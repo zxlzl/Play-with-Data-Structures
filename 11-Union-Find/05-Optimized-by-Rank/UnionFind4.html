@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// 第四版Union-Find
+		class UnionFind{
+			constructor(size){
+				this.parent = new Array(size); // parent[i]表示第i个元素所指向的父节点
+				this.rank = new Array(size);  // rank[i]表示以i为根的集合所表示的树的层数
+				// 初始化, 每一个parent[i]指向自己, 表示每一个元素自己自成一个集合
+				for (let i = 0; i < size; i++) {
+					this.parent[i] = i;
+					this.rank[i] = 1;
+				}
+			}
+
+			getSize(){
+				return this.parent.length;
+			}
+
+			// 查找过程, 查找元素p所对应的集合编号
+    		// O(h)复杂度, h为树的高度
+			find(p){
+				if(p<0||p>=this.parent.length){
+					throw new Error('p is out of bound.');
+				}
+				// 不断去查询自己的父亲节点, 直到到达根节点
+        		// 根节点的特点: parent[p] == p
+				while (p!=this.parent[p]) {
+					p = this.parent[p];
+				}
+				return p;
+			}
+
+			// 查看元素p和元素q是否所属一个集合
+    		// O(h)复杂度, h为树的高度
+			isConnected(p,q){
+				return this.find(p) == this.find(q);
+			}
+
+			// 合并元素p和元素q所属的集合
+    		// O(h)复杂度, h为树的高度
+			unionElements(p,q){
+				let pRoot = this.find(p);
+				let qRoot = this.find(q);
+				if (pRoot == qRoot) {
+					return;
+				}
+				// 根据两个元素所在树的rank不同判断合并方向
+        		// 将rank低的集合合并到rank高的集合上
+				if(this.rank[pRoot] < this.rank[qRoot])
+		            this.parent[pRoot] = qRoot;
+		        else if(this.rank[qRoot] < this.rank[pRoot])
+		            this.parent[qRoot] = pRoot;
+		        else{ // rank[pRoot] == rank[qRoot]
+		            this.parent[pRoot] = qRoot;
+		            this.rank[qRoot] += 1;   // 此时, 维护rank的值
+		        }
+			}
+		}
+
+		let unionFind = new UnionFind(6);
+		console.log(unionFind.find(3));
+		console.log(unionFind.isConnected(2,5));
+		unionFind.unionElements(2,5);
+		console.log(unionFind);
+	</script>
+</body>
+</html>
