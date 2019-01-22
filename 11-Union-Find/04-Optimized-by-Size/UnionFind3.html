@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		class UnionFind{
+			constructor(size){
+				this.parent = new Array(size);
+				this.sz = new Array(size);
+				for (let i = 0; i < size; i++) {
+					this.parent[i] = i;
+					this.sz[i] = 1;
+				}
+			}
+
+			getSize(){
+				return this.parent.length;
+			}
+
+			// 查找过程, 查找元素p所对应的集合编号
+    		// O(h)复杂度, h为树的高度
+			find(p){
+				if(p<0||p>=this.parent.length){
+					throw new Error('p is out of bound.');
+				}
+				// 不断去查询自己的父亲节点, 直到到达根节点
+        		// 根节点的特点: parent[p] == p
+				while (p!=this.parent[p]) {
+					p = this.parent[p];
+				}
+				return p;
+			}
+
+			// 查看元素p和元素q是否所属一个集合
+    		// O(h)复杂度, h为树的高度
+			isConnected(p,q){
+				return this.find(p) == this.find(q);
+			}
+
+			// 合并元素p和元素q所属的集合
+    		// O(h)复杂度, h为树的高度
+			unionElements(p,q){
+				let pRoot = this.find(p);
+				let qRoot = this.find(q);
+				if (pRoot == qRoot) {
+					return;
+				}
+				// 根据两个元素所在树的元素个数不同判断合并方向
+        		// 将元素个数少的集合合并到元素个数多的集合上
+				if (this.sz[pRoot]<this.sz[qRoot]) {
+					this.parent[pRoot] = qRoot;
+					this.sz[qRoot] += this.sz[pRoot];
+				}else{
+					this.parent[qRoot] = pRoot;
+					this.sz[pRoot] += this.sz[qRoot];
+				}
+			}
+		}
+
+		let unionFind = new UnionFind(6);
+		console.log(unionFind.find(3));
+		console.log(unionFind.isConnected(2,5));
+		unionFind.unionElements(2,5);
+		console.log(unionFind);
+	</script>
+</body>
+</html>
