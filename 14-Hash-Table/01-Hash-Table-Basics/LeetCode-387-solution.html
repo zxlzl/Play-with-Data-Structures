@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var firstUniqChar = function(s) {
+		    let freq = new Map();
+		    for(let i = 0;i<s.length;i++){
+		        if(!freq.has(s.charAt(i))){
+		            freq.set(s.charAt(i),1);
+		        }else{
+		            freq.set(s.charAt(i),freq.get(s.charAt(i))+1);
+		        }
+		    }
+		    for(let [key, value] of freq){
+		        if(value == 1){
+		            return s.indexOf(key);
+		        }
+		    }
+		    return -1;
+		};
+	</script>
+</body>
+</html>
